@@ -7,6 +7,7 @@ import { MessageCircle, Send, Loader2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { recordUsage } from "@/lib/usage";
 
 export const Route = createFileRoute("/chat")({
   head: () => ({
