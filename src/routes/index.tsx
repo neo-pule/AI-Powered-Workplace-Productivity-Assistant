@@ -89,6 +89,9 @@ const tiles: ReadonlyArray<{
 
 function Dashboard() {
   const usage = useUsage();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const totalRuns = tiles.reduce((sum, t) => sum + usage[t.kind].runs, 0);
   const totalChars = tiles.reduce((sum, t) => sum + usage[t.kind].chars, 0);
   const lastTs = Math.max(0, ...tiles.map((t) => usage[t.kind].lastRun ?? 0));
@@ -100,22 +103,33 @@ function Dashboard() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-10 p-6 md:p-10">
-      <section className="space-y-4">
+    <div className="mx-auto max-w-6xl space-y-8 p-4 sm:p-6 md:space-y-10 md:p-10">
+      <section className="space-y-3">
         <div className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs text-muted-foreground shadow-[var(--shadow-soft)]">
           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-          Aurora is ready
+          Aurora workspace
         </div>
-        <h1 className="font-display text-4xl md:text-5xl font-semibold tracking-tight">
-          Good to see you.
-          <br />
-          <span className="italic text-primary">What will we make today?</span>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+          Welcome back.
         </h1>
-        <p className="max-w-2xl text-muted-foreground">
+        <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
           Five AI tools, one calm workspace. Your activity is tracked locally so you can see what
           you're using most.
         </p>
       </section>
+
+      {/* AI disclaimer */}
+      <div
+        role="note"
+        className="flex items-start gap-3 rounded-xl border border-amber-200/70 bg-amber-50/60 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-100"
+      >
+        <Info className="mt-0.5 h-4 w-4 shrink-0" />
+        <p>
+          <span className="font-medium">Heads up:</span> AI-generated content may require human
+          review. Verify facts, names, and figures before acting on them.
+        </p>
+      </div>
+
 
       {/* Summary stats */}
       <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
