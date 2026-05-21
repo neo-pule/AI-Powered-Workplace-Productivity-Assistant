@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Mail,
@@ -10,9 +11,11 @@ import {
   Sparkles,
   Clock,
   RotateCcw,
+  Info,
 } from "lucide-react";
 import { useUsage, formatRelative, resetUsage, type UsageKind } from "@/lib/usage";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
