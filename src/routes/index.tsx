@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Mail,
@@ -10,9 +11,11 @@ import {
   Sparkles,
   Clock,
   RotateCcw,
+  Info,
 } from "lucide-react";
 import { useUsage, formatRelative, resetUsage, type UsageKind } from "@/lib/usage";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
@@ -86,6 +89,9 @@ const tiles: ReadonlyArray<{
 
 function Dashboard() {
   const usage = useUsage();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const totalRuns = tiles.reduce((sum, t) => sum + usage[t.kind].runs, 0);
   const totalChars = tiles.reduce((sum, t) => sum + usage[t.kind].chars, 0);
   const lastTs = Math.max(0, ...tiles.map((t) => usage[t.kind].lastRun ?? 0));
@@ -97,41 +103,66 @@ function Dashboard() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-10 p-6 md:p-10">
-      <section className="space-y-4">
+    <div className="mx-auto max-w-6xl space-y-8 p-4 sm:p-6 md:space-y-10 md:p-10">
+      <section className="space-y-3">
         <div className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs text-muted-foreground shadow-[var(--shadow-soft)]">
           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-          Aurora is ready
+          Aurora workspace
         </div>
-        <h1 className="font-display text-4xl md:text-5xl font-semibold tracking-tight">
-          Good to see you.
-          <br />
-          <span className="italic text-primary">What will we make today?</span>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+          Welcome back.
         </h1>
-        <p className="max-w-2xl text-muted-foreground">
+        <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
           Five AI tools, one calm workspace. Your activity is tracked locally so you can see what
           you're using most.
         </p>
       </section>
 
+      {/* AI disclaimer */}
+      <div
+        role="note"
+        className="flex items-start gap-3 rounded-xl border border-amber-200/70 bg-amber-50/60 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-100"
+      >
+        <Info className="mt-0.5 h-4 w-4 shrink-0" />
+        <p>
+          <span className="font-medium">Heads up:</span> AI-generated content may require human
+          review. Verify facts, names, and figures before acting on them.
+        </p>
+      </div>
+
+
       {/* Summary stats */}
       <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <StatCard icon={<Activity className="h-4 w-4" />} label="Total runs" value={totalRuns} />
-        <StatCard
-          icon={<Sparkles className="h-4 w-4" />}
-          label="Tools used"
-          value={`${activeTools} / ${tiles.length}`}
-        />
-        <StatCard
-          icon={<FileText className="h-4 w-4" />}
-          label="Output generated"
-          value={formatChars(totalChars)}
-        />
-        <StatCard
-          icon={<Clock className="h-4 w-4" />}
-          label="Last activity"
-          value={lastTs ? formatRelative(lastTs) : "—"}
-        />
+        {!mounted ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border bg-card p-4 shadow-[var(--shadow-soft)]"
+            >
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="mt-3 h-7 w-24" />
+            </div>
+          ))
+        ) : (
+          <>
+            <StatCard icon={<Activity className="h-4 w-4" />} label="Total runs" value={totalRuns} />
+            <StatCard
+              icon={<Sparkles className="h-4 w-4" />}
+              label="Tools used"
+              value={`${activeTools} / ${tiles.length}`}
+            />
+            <StatCard
+              icon={<FileText className="h-4 w-4" />}
+              label="Output generated"
+              value={formatChars(totalChars)}
+            />
+            <StatCard
+              icon={<Clock className="h-4 w-4" />}
+              label="Last activity"
+              value={lastTs ? formatRelative(lastTs) : "—"}
+            />
+          </>
+        )}
       </section>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -167,12 +198,18 @@ function Dashboard() {
                 <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-border/60 pt-3 text-xs">
                   <div>
                     <dt className="text-muted-foreground">{t.unit}</dt>
-                    <dd className="mt-0.5 font-semibold text-foreground">{stat.runs}</dd>
+                    <dd className="mt-0.5 font-semibold text-foreground">
+                      {mounted ? stat.runs : <Skeleton className="h-3.5 w-8" />}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-muted-foreground">Last used</dt>
                     <dd className="mt-0.5 font-semibold text-foreground">
-                      {formatRelative(stat.lastRun)}
+                      {mounted ? (
+                        formatRelative(stat.lastRun)
+                      ) : (
+                        <Skeleton className="h-3.5 w-16" />
+                      )}
                     </dd>
                   </div>
                 </dl>
