@@ -69,6 +69,7 @@ function ChatPage() {
     const text = input.trim();
     if (!text || busy) return;
     setInput("");
+    recordUsage("chat", text.length);
     await sendMessage({ text });
   };
 
