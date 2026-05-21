@@ -49,6 +49,7 @@ export function AiToolPanel({
         toast.error(res.error);
       } else {
         setOutput(res.text);
+        recordUsage(kind, res.text.length);
       }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Something went wrong");
