@@ -198,12 +198,18 @@ function Dashboard() {
                 <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-border/60 pt-3 text-xs">
                   <div>
                     <dt className="text-muted-foreground">{t.unit}</dt>
-                    <dd className="mt-0.5 font-semibold text-foreground">{stat.runs}</dd>
+                    <dd className="mt-0.5 font-semibold text-foreground">
+                      {mounted ? stat.runs : <Skeleton className="h-3.5 w-8" />}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-muted-foreground">Last used</dt>
                     <dd className="mt-0.5 font-semibold text-foreground">
-                      {formatRelative(stat.lastRun)}
+                      {mounted ? (
+                        formatRelative(stat.lastRun)
+                      ) : (
+                        <Skeleton className="h-3.5 w-16" />
+                      )}
                     </dd>
                   </div>
                 </dl>
