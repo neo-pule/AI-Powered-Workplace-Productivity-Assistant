@@ -5,6 +5,7 @@ import { Loader2, Sparkles, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { runAi } from "@/lib/ai.functions";
+import { recordUsage } from "@/lib/usage";
 import { toast } from "sonner";
 
 type Kind = "email" | "meetings" | "tasks" | "research";
