@@ -133,22 +133,36 @@ function Dashboard() {
 
       {/* Summary stats */}
       <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <StatCard icon={<Activity className="h-4 w-4" />} label="Total runs" value={totalRuns} />
-        <StatCard
-          icon={<Sparkles className="h-4 w-4" />}
-          label="Tools used"
-          value={`${activeTools} / ${tiles.length}`}
-        />
-        <StatCard
-          icon={<FileText className="h-4 w-4" />}
-          label="Output generated"
-          value={formatChars(totalChars)}
-        />
-        <StatCard
-          icon={<Clock className="h-4 w-4" />}
-          label="Last activity"
-          value={lastTs ? formatRelative(lastTs) : "—"}
-        />
+        {!mounted ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border bg-card p-4 shadow-[var(--shadow-soft)]"
+            >
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="mt-3 h-7 w-24" />
+            </div>
+          ))
+        ) : (
+          <>
+            <StatCard icon={<Activity className="h-4 w-4" />} label="Total runs" value={totalRuns} />
+            <StatCard
+              icon={<Sparkles className="h-4 w-4" />}
+              label="Tools used"
+              value={`${activeTools} / ${tiles.length}`}
+            />
+            <StatCard
+              icon={<FileText className="h-4 w-4" />}
+              label="Output generated"
+              value={formatChars(totalChars)}
+            />
+            <StatCard
+              icon={<Clock className="h-4 w-4" />}
+              label="Last activity"
+              value={lastTs ? formatRelative(lastTs) : "—"}
+            />
+          </>
+        )}
       </section>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
