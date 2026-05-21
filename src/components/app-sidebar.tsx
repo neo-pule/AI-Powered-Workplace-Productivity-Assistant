@@ -21,20 +21,27 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useUsage, type UsageKind } from "@/lib/usage";
 
-const items = [
+const items: Array<{
+  title: string;
+  url: string;
+  icon: typeof Mail;
+  kind?: UsageKind;
+}> = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Email Generator", url: "/email", icon: Mail },
-  { title: "Meeting Notes", url: "/meetings", icon: FileText },
-  { title: "Task Planner", url: "/tasks", icon: ListChecks },
-  { title: "Research Assist", url: "/research", icon: Compass },
-  { title: "AI Chatbot", url: "/chat", icon: MessageCircle },
+  { title: "Email Generator", url: "/email", icon: Mail, kind: "email" },
+  { title: "Meeting Notes", url: "/meetings", icon: FileText, kind: "meetings" },
+  { title: "Task Planner", url: "/tasks", icon: ListChecks, kind: "tasks" },
+  { title: "Research Assist", url: "/research", icon: Compass, kind: "research" },
+  { title: "AI Chatbot", url: "/chat", icon: MessageCircle, kind: "chat" },
 ];
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const currentPath = useRouterState({ select: (r) => r.location.pathname });
+  const usage = useUsage();
   const isActive = (path: string) =>
     path === "/" ? currentPath === "/" : currentPath.startsWith(path);
 
@@ -61,16 +68,34 @@ export function AppSidebar() {
           <SidebarGroupLabel>Workspace</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={isActive(item.url)} tooltip={item.title}>
-                    <Link to={item.url} className="flex items-center gap-3">
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items.map((item) => {
+                const runs = item.kind ? usage[item.kind].runs : 0;
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(item.url)}
+                      tooltip={
+                        item.kind ? `${item.title} · ${runs} runs` : item.title
+                      }
+                    >
+                      <Link to={item.url} className="flex items-center gap-3">
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1">{item.title}</span>
+                            {item.kind && runs > 0 && (
+                              <span className="ml-auto rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+                                {runs > 99 ? "99+" : runs}
+                              </span>
+                            )}
+                          </>
+                        )}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
