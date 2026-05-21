@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { FileText } from "lucide-react";
+import { FileText, ListTree, CheckSquare, CalendarClock } from "lucide-react";
 import { AiToolPanel } from "@/components/ai-tool-panel";
 
 export const Route = createFileRoute("/meetings")({
@@ -21,6 +21,29 @@ export const Route = createFileRoute("/meetings")({
         "Customer interview with Acme Corp — they want SSO, audit logs, and a 30-day trial.",
       ]}
       cta="Summarize meeting"
+      sections={[
+        {
+          id: "key-points",
+          title: "Key points",
+          icon: <ListTree className="h-3.5 w-3.5" />,
+          description:
+            "TL;DR of the conversation, decisions made, and the topics that mattered most.",
+        },
+        {
+          id: "actions",
+          title: "Actions",
+          icon: <CheckSquare className="h-3.5 w-3.5" />,
+          description:
+            "Concrete action items with owners so nothing slips through after the meeting.",
+        },
+        {
+          id: "deadlines",
+          title: "Deadlines",
+          icon: <CalendarClock className="h-3.5 w-3.5" />,
+          description:
+            "Due dates, milestones, and follow-up timing surfaced from the discussion.",
+        },
+      ]}
     />
   ),
 });
