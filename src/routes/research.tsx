@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Compass, Lightbulb, BookOpen } from "lucide-react";
+import { Compass } from "lucide-react";
 import { AiToolPanel } from "@/components/ai-tool-panel";
 
 export const Route = createFileRoute("/research")({
@@ -22,22 +22,6 @@ export const Route = createFileRoute("/research")({
         "Brief me on the current state of climate-tech investing.",
       ]}
       cta="Research it"
-      sections={[
-        {
-          id: "insights",
-          title: "Insights",
-          icon: <Lightbulb className="h-3.5 w-3.5" />,
-          description:
-            "Non-obvious takeaways, trade-offs, and considerations that shape a smart decision.",
-        },
-        {
-          id: "summaries",
-          title: "Summaries",
-          icon: <BookOpen className="h-3.5 w-3.5" />,
-          description:
-            "A concise overview of the topic with the key facts you need at a glance.",
-        },
-      ]}
     />
   ),
 });
