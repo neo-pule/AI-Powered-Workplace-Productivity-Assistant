@@ -186,6 +186,9 @@ function ChatPage() {
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </div>
+        <p className="mx-auto mt-2 max-w-3xl text-center text-xs text-muted-foreground">
+          AI-generated content may require human review.
+        </p>
       </form>
     </div>
   );
