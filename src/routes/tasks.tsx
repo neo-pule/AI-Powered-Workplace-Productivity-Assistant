@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ListChecks } from "lucide-react";
+import { ListChecks, Flag, CalendarRange } from "lucide-react";
 import { AiToolPanel } from "@/components/ai-tool-panel";
 
 export const Route = createFileRoute("/tasks")({
@@ -22,6 +22,22 @@ export const Route = createFileRoute("/tasks")({
         "Onboarding plan for a new engineering hire (first 30 days).",
       ]}
       cta="Plan it"
+      sections={[
+        {
+          id: "prioritization",
+          title: "Prioritization",
+          icon: <Flag className="h-3.5 w-3.5" />,
+          description:
+            "Tasks ranked by impact and dependencies, so you know what to tackle first.",
+        },
+        {
+          id: "scheduling",
+          title: "Scheduling",
+          icon: <CalendarRange className="h-3.5 w-3.5" />,
+          description:
+            "Time estimates and phased timelines that map the plan onto a realistic calendar.",
+        },
+      ]}
     />
   ),
 });

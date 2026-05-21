@@ -1,6 +1,7 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import { useServerFn } from "@tanstack/react-start";
+import { useRouterState } from "@tanstack/react-router";
 import { Loader2, Sparkles, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +11,13 @@ import { toast } from "sonner";
 
 type Kind = "email" | "meetings" | "tasks" | "research";
 
+export interface PanelSection {
+  id: string;
+  title: string;
+  icon: ReactNode;
+  description: string;
+}
+
 interface AiToolPanelProps {
   kind: Kind;
   title: string;
@@ -18,6 +26,7 @@ interface AiToolPanelProps {
   placeholder: string;
   examples: string[];
   cta: string;
+  sections?: PanelSection[];
 }
 
 export function AiToolPanel({
@@ -28,12 +37,20 @@ export function AiToolPanel({
   placeholder,
   examples,
   cta,
+  sections,
 }: AiToolPanelProps) {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const runAiFn = useServerFn(runAi);
+  const hash = useRouterState({ select: (r) => r.location.hash });
+
+  useEffect(() => {
+    if (!hash) return;
+    const el = document.getElementById(hash);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [hash]);
 
   const run = async (prompt?: string) => {
     const value = (prompt ?? input).trim();
@@ -75,6 +92,32 @@ export function AiToolPanel({
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">{title}</h1>
         <p className="max-w-2xl text-muted-foreground">{description}</p>
       </header>
+
+      {sections && sections.length > 0 && (
+        <section
+          aria-label="What this tool covers"
+          className={`grid gap-3 ${
+            sections.length >= 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"
+          }`}
+        >
+          {sections.map((s) => (
+            <article
+              key={s.id}
+              id={s.id}
+              className="scroll-mt-20 rounded-2xl border bg-card p-4 shadow-[var(--shadow-soft)] target:ring-2 target:ring-primary/40"
+            >
+              <div className="flex items-center gap-2">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  {s.icon}
+                </span>
+                <h2 className="text-sm font-semibold">{s.title}</h2>
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{s.description}</p>
+            </article>
+          ))}
+        </section>
+      )}
+
 
       <section className="rounded-2xl border bg-card p-5 shadow-[var(--shadow-soft)]">
         <label className="text-sm font-medium">Your input</label>
