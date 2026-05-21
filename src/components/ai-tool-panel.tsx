@@ -124,8 +124,16 @@ export function AiToolPanel({
           )}
         </div>
         {loading ? (
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" /> Thinking…
+          <div className="space-y-3" aria-live="polite" aria-busy="true">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" /> Generating…
+            </div>
+            <div className="space-y-2">
+              <div className="h-3 w-3/4 animate-pulse rounded bg-muted" />
+              <div className="h-3 w-5/6 animate-pulse rounded bg-muted" />
+              <div className="h-3 w-2/3 animate-pulse rounded bg-muted" />
+              <div className="h-3 w-4/5 animate-pulse rounded bg-muted" />
+            </div>
           </div>
         ) : output ? (
           <div className="prose prose-sm max-w-none prose-headings:font-display prose-headings:tracking-tight prose-pre:bg-muted">
@@ -137,6 +145,10 @@ export function AiToolPanel({
           </p>
         )}
       </section>
+
+      <p className="text-center text-xs text-muted-foreground">
+        AI-generated content may require human review.
+      </p>
     </div>
   );
 }
