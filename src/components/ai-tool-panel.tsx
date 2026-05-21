@@ -1,6 +1,7 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import { useServerFn } from "@tanstack/react-start";
+import { useRouterState } from "@tanstack/react-router";
 import { Loader2, Sparkles, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +11,13 @@ import { toast } from "sonner";
 
 type Kind = "email" | "meetings" | "tasks" | "research";
 
+export interface PanelSection {
+  id: string;
+  title: string;
+  icon: ReactNode;
+  description: string;
+}
+
 interface AiToolPanelProps {
   kind: Kind;
   title: string;
@@ -18,6 +26,7 @@ interface AiToolPanelProps {
   placeholder: string;
   examples: string[];
   cta: string;
+  sections?: PanelSection[];
 }
 
 export function AiToolPanel({
@@ -28,12 +37,20 @@ export function AiToolPanel({
   placeholder,
   examples,
   cta,
+  sections,
 }: AiToolPanelProps) {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const runAiFn = useServerFn(runAi);
+  const hash = useRouterState({ select: (r) => r.location.hash });
+
+  useEffect(() => {
+    if (!hash) return;
+    const el = document.getElementById(hash);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [hash]);
 
   const run = async (prompt?: string) => {
     const value = (prompt ?? input).trim();
