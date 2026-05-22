@@ -73,8 +73,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "Aurora — AI Workspace Dashboard" },
       { name: "description", content: "AI Assistant Hub is a PWA dashboard offering AI-powered tools for productivity and communication." },
       { name: "twitter:description", content: "AI Assistant Hub is a PWA dashboard offering AI-powered tools for productivity and communication." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d63848e8-ff5c-40be-a57c-1e366c4fa596/id-preview-3ec85784--83dd74ec-8eb1-4e1e-a9fa-bdda7f306e73.lovable.app-1779364190529.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d63848e8-ff5c-40be-a57c-1e366c4fa596/id-preview-3ec85784--83dd74ec-8eb1-4e1e-a9fa-bdda7f306e73.lovable.app-1779364190529.png" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/955ed48d-a1b8-4e00-bef7-26773c4c1af8/id-preview-0b6999b2--83dd74ec-8eb1-4e1e-a9fa-bdda7f306e73.lovable.app-1779431716637.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/955ed48d-a1b8-4e00-bef7-26773c4c1af8/id-preview-0b6999b2--83dd74ec-8eb1-4e1e-a9fa-bdda7f306e73.lovable.app-1779431716637.png" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
